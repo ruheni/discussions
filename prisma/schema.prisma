@@ -34,6 +34,8 @@ model Discussion {
   community   Community? @relation(fields: [communityId], references: [id])
   communityId BigInt?
 
+  author   User       @relation(fields: [authorId], references: [id])
+  authorId   BigInt
   category Category[]
 }
 
@@ -46,8 +48,8 @@ model Category {
 
 model User {
   id        BigInt @id @default(autoincrement())
-  firstName String
-  lastName  String
+  firstName String?
+  lastName  String?
   username  String @unique
   email     String @unique
 
@@ -59,6 +61,7 @@ model User {
   password Password?
 
   communities Community[]
+  discussions Discussion[]
 }
 
 model Password {
