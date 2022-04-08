@@ -22,11 +22,13 @@ interface ActionData {
   errors: {
     email?: string;
     password?: string;
+    username?: string;
   };
 }
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
+  const username = formData.get("username")
   const email = formData.get("email");
   const password = formData.get("password");
   const redirectTo = formData.get("redirectTo");
@@ -36,6 +38,13 @@ export const action: ActionFunction = async ({ request }) => {
       { errors: { email: "Email is invalid" } },
       { status: 400 }
     );
+  }
+
+  if (typeof username !== "string") {
+    return json<ActionData>(
+      { errors: { username: "Username is required" } },
+      { status: 400 }
+    )
   }
 
   if (typeof password !== "string") {
@@ -60,7 +69,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const user = await createUser(email, password);
+  const user = await createUser(username, email, password);
 
   return createUserSession({
     request,
