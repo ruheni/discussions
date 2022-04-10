@@ -28,7 +28,7 @@ interface ActionData {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const username = formData.get("username")
+  const username = formData.get("username");
   const email = formData.get("email");
   const password = formData.get("password");
   const redirectTo = formData.get("redirectTo");
@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
     return json<ActionData>(
       { errors: { username: "Username is required" } },
       { status: 400 }
-    )
+    );
   }
 
   if (typeof password !== "string") {
