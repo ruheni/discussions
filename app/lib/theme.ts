@@ -6,8 +6,8 @@ export const theme = extendTheme({
     initialColorMode: "light",
   },
   fonts: {
-    heading: '',
-    body: ''
+    heading: "",
+    body: "",
   },
-  components: {}
-})
+  components: {},
+});
