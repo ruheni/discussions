@@ -27,6 +27,7 @@ export async function getSession(request: Request) {
 export async function getUserId(request: Request): Promise<bigint | undefined> {
   const session = await getSession(request);
   const userId = session.get(USER_SESSION_KEY);
+
   return userId;
 }
 
@@ -73,7 +74,10 @@ export async function createUserSession({
   redirectTo: string;
 }) {
   const session = await getSession(request);
-  session.set(USER_SESSION_KEY, userId);
+  session.set(
+    USER_SESSION_KEY,
+    JSON.stringify(userId, (_, v) => (typeof v === "bigint" ? v.toString() : v))
+  );
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session, {

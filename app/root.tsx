@@ -1,8 +1,5 @@
-import React, { useContext, useEffect } from 'react'
-import type {
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/node";
+import React, { useContext, useEffect } from "react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Links,
@@ -12,18 +9,20 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
+  useLoaderData,
 } from "@remix-run/react";
-import { withEmotionCache } from '@emotion/react';
-import { ChakraProvider, Container } from '@chakra-ui/react';
+import { withEmotionCache } from "@emotion/react";
+import { ChakraProvider, Text, Heading, Box, Flex } from "@chakra-ui/react";
 
 import { getUser } from "./session.server";
 import { ServerStyleContext, ClientStyleContext } from "./lib/chakra-context";
-import { theme } from './lib/theme';
+import { theme } from "./lib/theme";
+import { NavBar } from "./components/NavBar";
+import { CloseIcon } from "@chakra-ui/icons";
 
-interface DocumentProps {
-  children: React.ReactNode
-}
-
+type DocumentProps = {
+  children: React.ReactNode;
+};
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -36,78 +35,114 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  return json<LoaderData>({
-    user: await getUser(request),
+  const res = await getUser(request);
+  return json({
+    user: JSON.stringify(res, (_, v) =>
+      typeof v === "bigint" ? v.toString() : v
+    ),
   });
 };
 
-const App = withEmotionCache(({ children }: DocumentProps, emotionCache) => {
-  const serverStyleData = useContext(ServerStyleContext)
-  const clientStyleData = useContext(ClientStyleContext)
+const Document = withEmotionCache(
+  ({ children }: DocumentProps, emotionCache) => {
+    const serverStyleData = useContext(ServerStyleContext);
+    const clientStyleData = useContext(ClientStyleContext);
 
-  // run only on the client 
-  useEffect(() => {
-    // re-link sheet container
-    emotionCache.sheet.container = document.head;
+    // run only on the client
+    useEffect(() => {
+      // re-link sheet container
+      emotionCache.sheet.container = document.head;
 
-    // re-inject tags
-    const tags = emotionCache.sheet.tags;
-    emotionCache.sheet.flush()
-    tags.forEach((tag) => {
-      (emotionCache.sheet as any)._insertTag(tag)
-    })
+      // re-inject tags
+      const tags = emotionCache.sheet.tags;
+      emotionCache.sheet.flush();
+      tags.forEach((tag) => {
+        (emotionCache.sheet as any)._insertTag(tag);
+      });
 
-    // reset cache to reapply global styles
-    clientStyleData?.reset()
+      // reset cache to reapply global styles
+      clientStyleData?.reset();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstaticom" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
-          rel="stylesheet"
-        />
-        <Meta />
-        <Links />
-        {serverStyleData?.map(({ key, ids, css }) => (
-          <style
-            key={key}
-            data-emotion={`${key} ${ids.join(' ')}`}
-            dangerouslySetInnerHTML={{ __html: css }}
+    return (
+      <html lang="en">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstaticom" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+            rel="stylesheet"
           />
-        ))}
-      </head>
-      <body>
-        <ChakraProvider theme={theme}>
-          <Container maxWidth="xl" padding="0">
-            <Outlet />
-            {children}
-            <ScrollRestoration />
-            <Scripts />
-            {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
-          </Container>
-        </ChakraProvider>
-      </body>
-    </html>
-  )
-})
+          {serverStyleData?.map(({ key, ids, css }) => (
+            <style
+              key={key}
+              data-emotion={`${key} ${ids.join(" ")}`}
+              dangerouslySetInnerHTML={{ __html: css }}
+            />
+          ))}
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <ChakraProvider theme={theme}>{children}</ChakraProvider>
+          <ScrollRestoration />
+          <Scripts />
+          {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
+        </body>
+      </html>
+    );
+  }
+);
+
+const App = () => {
+  const { user } = useLoaderData<LoaderData>();
+  return (
+    <Document>
+      <NavBar user={JSON.parse(user)} />
+      <Outlet />
+    </Document>
+  );
+};
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.error({ error });
+  return (
+    <Document>
+      <Box textAlign="center" py={10} px={6}>
+        <Box display="inline-block">
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            bg={"red.500"}
+            rounded={"50px"}
+            w={"40px"}
+            h={"40px"}
+            textAlign="center"
+          >
+            <CloseIcon boxSize={"20px"} color={"white"} />
+          </Flex>
+        </Box>
+        <Heading as="h2" size="xl" mt={6} mb={2}>
+          {error.name}: {error.message}
+        </Heading>
+        <Text color={"gray.500"}>{error.stack}</Text>
+      </Box>
+    </Document>
+  );
+}
 
 export function CatchBoundary() {
-  let error = useCatch()
+  let error = useCatch();
 
   switch (error.status) {
     case 401:
-
       break;
     case 404:
-
       break;
 
     default:
@@ -115,5 +150,4 @@ export function CatchBoundary() {
   }
 }
 
-export default App
-
+export default App;
