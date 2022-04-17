@@ -2,6 +2,7 @@ import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
 import { getUserById } from "~/services/user.server";
+import { serialize } from "./lib/bigint";
 
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
@@ -74,10 +75,7 @@ export async function createUserSession({
   redirectTo: string;
 }) {
   const session = await getSession(request);
-  session.set(
-    USER_SESSION_KEY,
-    JSON.stringify(userId, (_, v) => (typeof v === "bigint" ? v.toString() : v))
-  );
+  session.set(USER_SESSION_KEY, serialize(userId));
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session, {

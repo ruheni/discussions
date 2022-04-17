@@ -17,8 +17,10 @@ import { ChakraProvider, Text, Heading, Box, Flex } from "@chakra-ui/react";
 import { getUser } from "./session.server";
 import { ServerStyleContext, ClientStyleContext } from "./lib/chakra-context";
 import { theme } from "./lib/theme";
+
 import { NavBar } from "./components/NavBar";
 import { CloseIcon } from "@chakra-ui/icons";
+import { deserialize, serialize } from "./lib/bigint";
 
 type DocumentProps = {
   children: React.ReactNode;
@@ -38,9 +40,7 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }) => {
   const res = await getUser(request);
   return json({
-    user: JSON.stringify(res, (_, v) =>
-      typeof v === "bigint" ? v.toString() : v
-    ),
+    user: serialize(res),
   });
 };
 
@@ -103,7 +103,7 @@ const App = () => {
   const { user } = useLoaderData();
   return (
     <Document>
-      <NavBar user={JSON.parse(user)} />
+      <NavBar user={deserialize(user)} />
       <Outlet />
     </Document>
   );

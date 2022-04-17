@@ -2,12 +2,13 @@ import type { Password, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
+import { deserialize } from "~/lib/bigint";
 
 export type { User } from "@prisma/client";
 
 export async function getUserById(id: bigint) {
   // @ts-ignore
-  return prisma.user.findUnique({ where: { id: BigInt(JSON.parse(id)) } });
+  return prisma.user.findUnique({ where: { id: deserialize(id) } });
 }
 
 export async function getUserByEmail(email: string) {
