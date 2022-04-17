@@ -1,7 +1,7 @@
 import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
 
-import type { User } from "~/models/user.server";
+import type { User } from "~/services/user.server";
 
 /**
  * This base hook is used in other hooks to quickly search for specific data
@@ -40,8 +40,4 @@ export function useUser(): User {
     );
   }
   return maybeUser;
-}
-
-export function validateEmail(email: unknown): email is string {
-  return typeof email === "string" && email.length > 3 && email.includes("@");
 }

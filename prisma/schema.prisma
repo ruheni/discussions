@@ -35,7 +35,7 @@ model Discussion {
   communityId BigInt?
 
   author   User       @relation(fields: [authorId], references: [id])
-  authorId   BigInt
+  authorId BigInt
   category Category[]
 }
 
@@ -47,11 +47,12 @@ model Category {
 }
 
 model User {
-  id        BigInt @id @default(autoincrement())
+  id        BigInt  @id @default(autoincrement())
   firstName String?
   lastName  String?
-  username  String @unique
-  email     String @unique
+  username  String  @unique
+  email     String  @unique
+  imageUrl  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
