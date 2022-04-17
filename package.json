@@ -33,6 +33,7 @@
     "/public/build"
   ],
   "dependencies": {
+    "@chakra-ui/icons": "1.1.7",
     "@chakra-ui/react": "1.8.8",
     "@emotion/cache": "11.7.1",
     "@emotion/react": "11.9.0",
@@ -95,5 +96,7 @@
   "engines": {
     "node": ">=14"
   },
-  "prisma": {}
+  "prisma": {
+    "seed": "ts-node --require tsconfig-paths/register prisma/seed.ts"
+  }
 }
