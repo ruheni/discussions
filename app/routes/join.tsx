@@ -93,6 +93,7 @@ export default function Join() {
           </Heading>
         </Stack>
 
+        {/* @ts-ignore */}
         <Form method="post">
           <Stack spacing={4}>
             <FormField
