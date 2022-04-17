@@ -4,11 +4,7 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import {
-  Link,
-  useSearchParams,
-  useTransition,
-} from "@remix-run/react";
+import { Link, useSearchParams, useTransition } from "@remix-run/react";
 import * as React from "react";
 import {
   Box,
@@ -24,7 +20,7 @@ import {
 import { z } from "zod";
 
 import { createUserSession, getUserId } from "~/session.server";
-import { verifyLogin } from "~/models/user.server";
+import { verifyLogin } from "~/services/user.server";
 import { FormError, FormField, Form } from "~/components/Form";
 import { validateFormData } from "~/lib/form";
 

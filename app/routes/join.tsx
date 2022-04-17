@@ -9,7 +9,7 @@ import { z } from "zod";
 
 import { getUserId, createUserSession } from "~/session.server";
 
-import { createUser, getUserByEmail } from "~/models/user.server";
+import { createUser, getUserByEmail } from "~/services/user.server";
 import {
   Center,
   Box,

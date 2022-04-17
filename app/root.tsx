@@ -30,6 +30,7 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type LoaderData = {
   user: Awaited<ReturnType<typeof getUser>>;
 };
@@ -99,7 +100,7 @@ const Document = withEmotionCache(
 );
 
 const App = () => {
-  const { user } = useLoaderData<LoaderData>();
+  const { user } = useLoaderData();
   return (
     <Document>
       <NavBar user={JSON.parse(user)} />
