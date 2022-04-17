@@ -92,6 +92,7 @@ export default function Login() {
           </Heading>
         </Stack>
 
+        {/* @ts-ignore */}
         <Form method="post">
           <Stack spacing={3}>
             <FormField
