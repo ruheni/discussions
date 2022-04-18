@@ -22,17 +22,18 @@ type Props = {
   user: User | null;
 };
 
-export function NavBar(props: Props) {
+export default function NavBar(props: Props) {
   const submit = useSubmit();
 
   return (
-    <Box width="100%">
+    <Box width="100%"
+    >
       <Flex
+        py={{ base: 2 }}
+        px={{ base: 8 }}
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
         minH={"60px"}
-        py={{ base: 2 }}
-        px={{ base: 8 }}
         borderBottom={1}
         borderStyle={"solid"}
         borderColor={useColorModeValue("gray.200", "gray.900")}
