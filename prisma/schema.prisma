@@ -8,7 +8,7 @@ generator client {
 }
 
 model Community {
-  id          BigInt  @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String  @unique @db.Citext
   url         String?
   description String?
@@ -24,7 +24,7 @@ model Community {
 }
 
 model Discussion {
-  id      BigInt @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   title   String
   content String
 
@@ -32,22 +32,22 @@ model Discussion {
   updatedAt DateTime @updatedAt
 
   community   Community? @relation(fields: [communityId], references: [id])
-  communityId BigInt?
+  communityId Int?
 
   author   User       @relation(fields: [authorId], references: [id])
-  authorId BigInt
+  authorId Int
   category Category[]
 }
 
 model Category {
-  id   BigInt @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String
 
   discussion Discussion[]
 }
 
 model User {
-  id        BigInt  @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   firstName String?
   lastName  String?
   username  String  @unique
@@ -68,8 +68,8 @@ model User {
 model Password {
   hash String
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId BigInt @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int  @unique
 }
 
 enum Role {
