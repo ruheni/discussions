@@ -18,9 +18,8 @@ import { getUser } from "./session.server";
 import { ServerStyleContext, ClientStyleContext } from "./lib/chakra-context";
 import { theme } from "./lib/theme";
 
-import { NavBar } from "./components/NavBar";
+import NavBar from "./components/NavBar";
 import { CloseIcon } from "@chakra-ui/icons";
-import { deserialize, serialize } from "./lib/bigint";
 
 type DocumentProps = {
   children: React.ReactNode;
@@ -38,10 +37,8 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const res = await getUser(request);
-  return json({
-    user: serialize(res),
-  });
+  const user = await getUser(request);
+  return json({ user, });
 };
 
 const Document = withEmotionCache(
@@ -103,8 +100,13 @@ const App = () => {
   const { user } = useLoaderData();
   return (
     <Document>
-      <NavBar user={deserialize(user)} />
-      <Outlet />
+      <NavBar user={user} />
+      <Box
+        my={{ base: 2 }}
+        mx={{ base: 8 }}
+      >
+        <Outlet />
+      </Box>
     </Document>
   );
 };

@@ -20,7 +20,7 @@ import {
 import { z } from "zod";
 
 import { createUserSession, getUserId } from "~/session.server";
-import { verifyLogin } from "~/services/user.server";
+import { login } from "~/services/user.server";
 import { FormError, FormField, Form } from "~/components/Form";
 import { validateFormData } from "~/lib/form";
 
@@ -35,13 +35,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   return null;
 };
 
-type ActionData = {
-  errors?: {
-    email?: string;
-    password?: string;
-  };
-};
-
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
@@ -51,14 +44,14 @@ export const action: ActionFunction = async ({ request }) => {
   const { data, fieldErrors } = await validateFormData(loginSchema, formData);
 
   if (fieldErrors) {
-    return json<ActionData>({ errors: data }, { status: 400 });
+    return json({ fieldErrors, data }, { status: 400 });
   }
 
-  const user = await verifyLogin(data.email, data.password);
+  const { user, error } = await login(data.email, data.password);
 
-  if (!user) {
-    return json<ActionData>(
-      { errors: { email: "Invalid email or password" } },
+  if (!user || error) {
+    return json(
+      { formError: error, data },
       { status: 400 }
     );
   }
@@ -110,6 +103,7 @@ export default function Login() {
             ></FormField>
 
             <input type="hidden" name="redirectTo" value={redirectTo} />
+            <FormError />
 
             <Box>
               <Button
@@ -121,7 +115,6 @@ export default function Login() {
               >
                 Login
               </Button>
-              <FormError />
             </Box>
           </Stack>
 

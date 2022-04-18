@@ -2,13 +2,11 @@ import type { Password, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
-import { deserialize } from "~/lib/bigint";
 
 export type { User } from "@prisma/client";
 
-export async function getUserById(id: bigint) {
-  // @ts-ignore
-  return prisma.user.findUnique({ where: { id: deserialize(id) } });
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({ where: { id: Number(id) } });
 }
 
 export async function getUserByEmail(email: string) {
@@ -39,7 +37,7 @@ export async function deleteUserByEmail(email: User["email"]) {
   return prisma.user.delete({ where: { email } });
 }
 
-export async function verifyLogin(
+export async function login(
   email: User["email"],
   password: Password["hash"]
 ) {
@@ -51,7 +49,7 @@ export async function verifyLogin(
   });
 
   if (!userWithPassword || !userWithPassword.password) {
-    return null;
+    return { error: "Incorrect email or password" };
   }
 
   const isValid = await bcrypt.compare(
@@ -60,10 +58,10 @@ export async function verifyLogin(
   );
 
   if (!isValid) {
-    return null;
+    return { error: "Incorrect email or password" };
   }
 
   const { password: _password, ...userWithoutPassword } = userWithPassword;
 
-  return userWithoutPassword;
+  return { user: userWithoutPassword };
 }
