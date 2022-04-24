@@ -26,33 +26,36 @@ const communitiesData: Prisma.CommunityCreateInput[] = [
       create: [
         {
           title: "Seems serverless databases are the new hotness, eiy?",
-          content: "How to serverless databases work and what provider would you recommend?",
+          content:
+            "How to serverless databases work and what provider would you recommend?",
           author: {
             create: {
-              username: 'racoon',
-              email: "racoon@idea.biz"
-            }
-          }
-        }
-      ]
-    }
+              username: "raccoon",
+              email: "raccoon@idea.biz",
+            },
+          },
+        },
+      ],
+    },
   },
   {
     name: "k8s",
     discussions: {
       create: [
         {
-          title: "How can I distribute my MySQL database using Vitess in production?",
-          content: "Can someone explain to me the different configurations I need to be aware of when using Vitess?",
+          title:
+            "How can I distribute my MySQL database using Vitess in production?",
+          content:
+            "Can someone explain to me the different configurations I need to be aware of when using Vitess?",
           author: {
             create: {
-              username: 'rachel_stone',
-              email: "rachel@stone.io"
-            }
-          }
+              username: "rachel_stone",
+              email: "rachel@stone.io",
+            },
+          },
         },
-      ]
-    }
+      ],
+    },
   },
   { name: "programmers-are-human-too" },
   { name: "javascript-memes" },
@@ -69,9 +72,7 @@ async function seed() {
     });
   }
   console.log("... Done");
-
 }
-
 
 seed()
   .catch((e) => {

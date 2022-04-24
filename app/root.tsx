@@ -12,7 +12,14 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { withEmotionCache } from "@emotion/react";
-import { ChakraProvider, Text, Heading, Box, Flex } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  Text,
+  Heading,
+  Box,
+  Flex,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 import { getUser } from "./session.server";
 import { ServerStyleContext, ClientStyleContext } from "./lib/chakra-context";
@@ -38,7 +45,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
-  return json({ user, });
+  return json({ user });
 };
 
 const Document = withEmotionCache(
@@ -102,8 +109,11 @@ const App = () => {
     <Document>
       <NavBar user={user} />
       <Box
-        my={{ base: 2 }}
-        mx={{ base: 8 }}
+        minHeight="calc(100vh - 60px)"
+        py={{ base: 2 }}
+        px={{ base: 8 }}
+        maxWidth="100%"
+        bg={useColorModeValue("gray.50", "gray.800")}
       >
         <Outlet />
       </Box>

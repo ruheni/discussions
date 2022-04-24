@@ -56,7 +56,10 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (existingUser) {
     return json(
-      { fieldErrors, data: "A user already exists with this email or username" },
+      {
+        fieldErrors,
+        data: "A user already exists with this email or username",
+      },
       { status: 400 }
     );
   }

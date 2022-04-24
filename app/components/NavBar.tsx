@@ -26,8 +26,7 @@ export default function NavBar(props: Props) {
   const submit = useSubmit();
 
   return (
-    <Box width="100%"
-    >
+    <Box width="100%">
       <Flex
         py={{ base: 2 }}
         px={{ base: 8 }}

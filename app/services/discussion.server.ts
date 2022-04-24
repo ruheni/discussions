@@ -11,10 +11,10 @@ export async function getDiscussions() {
           username: true,
           id: true,
           imageUrl: true,
-        }
+        },
       },
       community: true,
-    }
+    },
   });
 }
 
@@ -27,15 +27,15 @@ export async function getDiscussion({ id }: { id: string }) {
           username: true,
           id: true,
           imageUrl: true,
-        }
+        },
       },
       community: true,
-    }
-  })
+    },
+  });
 }
 
-export async function createDiscussion() { }
+export async function createDiscussion() {}
 
-export async function updateDiscussion() { }
+export async function updateDiscussion() {}
 
-export async function deleteDiscussion(id: bigint) { }
+export async function deleteDiscussion(id: bigint) {}

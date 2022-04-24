@@ -50,10 +50,7 @@ export const action: ActionFunction = async ({ request }) => {
   const { user, error } = await login(data.email, data.password);
 
   if (!user || error) {
-    return json(
-      { formError: error, data },
-      { status: 400 }
-    );
+    return json({ formError: error, data }, { status: 400 });
   }
 
   return createUserSession({
