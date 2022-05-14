@@ -1,27 +1,15 @@
+import * as React from "react";
 import type {
   ActionFunction,
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link, useSearchParams, useTransition } from "@remix-run/react";
-import * as React from "react";
-import {
-  Box,
-  Button,
-  Center,
-  Text,
-  Heading,
-  Stack,
-  Link as ChakraLink,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Checkbox,
-} from "@chakra-ui/react";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { z } from "zod";
 
 import { createUserSession, getUserId } from "~/session.server";
 import { login } from "~/services/user.server";
-import { FormError, FormField, Form } from "~/components/Form";
 import { validateFormData } from "~/lib/form";
 
 const loginSchema = z.object({
@@ -34,6 +22,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (userId) return redirect("/");
   return null;
 };
+
+interface ActionData {
+  errors: {
+    email?: string;
+    password?: string;
+  };
+}
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -63,75 +58,120 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Login",
+    title: "Login to DisQuss",
   };
 };
 
 export default function Login() {
   const [searchParams] = useSearchParams();
-  const { state } = useTransition();
-  const redirectTo = searchParams.get("redirectTo") || "/";
-  const isSubmitting = state === "submitting";
+  const redirectTo = searchParams.get("redirectTo") ?? undefined;
+  const actionData = useActionData() as ActionData;
+  const emailRef = React.useRef<HTMLInputElement>(null);
+  const passwordRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (actionData?.errors?.email) {
+      emailRef.current?.focus();
+    } else if (actionData?.errors?.password) {
+      passwordRef.current?.focus();
+    }
+  }, [actionData]);
 
   return (
-    <Center flexDir="column" pt="10">
-      <Box w={["90%", 450]}>
-        <Stack marginBottom={10}>
-          <Heading as="h1" fontSize="3xl">
-            Login
-          </Heading>
-        </Stack>
+    <div className="flex min-h-[50%] flex-col justify-center">
+      <div className="mx-auto w-full max-w-md px-8">
+        <Form method="post" className="space-y-6" noValidate>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email address
+            </label>
+            <div className="mt-1">
+              <input
+                ref={emailRef}
+                id="email"
+                required
+                autoFocus={true}
+                name="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={actionData?.errors?.email ? true : undefined}
+                aria-describedby="email-error"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
+              {actionData?.errors?.email && (
+                <div className="pt-1 text-red-700" id="email-error">
+                  {actionData.errors.email}
+                </div>
+              )}
+            </div>
+          </div>
 
-        {/* @ts-ignore */}
-        <Form method="post">
-          <Stack spacing={3}>
-            <FormField
-              isRequired
-              label="Email address"
-              name="email"
-              placeholder="joe@email.com"
-            />
-            <FormField
-              isRequired
-              label="Password"
-              name="password"
-              type="password"
-              placeholder="**************"
-            ></FormField>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <div className="mt-1">
+              <input
+                id="password"
+                ref={passwordRef}
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                aria-invalid={actionData?.errors?.password ? true : undefined}
+                aria-describedby="password-error"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
+              {actionData?.errors?.password && (
+                <div className="pt-1 text-red-700" id="password-error">
+                  {actionData.errors.password}
+                </div>
+              )}
+            </div>
+          </div>
 
-            <input type="hidden" name="redirectTo" value={redirectTo} />
-            <FormError />
-
-            <Box>
-              <Button
-                type="submit"
-                isFullWidth
-                colorScheme="pink"
-                isDisabled={isSubmitting}
-                isLoading={isSubmitting}
+          <input type="hidden" name="redirectTo" value={redirectTo} />
+          <button
+            type="submit"
+            className="w-full rounded bg-pink-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+          >
+            Log in
+          </button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember"
+                name="remember"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-blue-500"
+              />
+              <label
+                htmlFor="remember"
+                className="ml-2 block text-sm text-gray-900"
               >
-                Login
-              </Button>
-            </Box>
-          </Stack>
-
-          <Stack align="center" justify="space-between" my="7">
-            {/* <FormControl>
-  
-              <Text>
-                <Checkbox>Remember me?</Checkbox>
-              </Text>
-            </FormControl> */}
-
-            <Text pt="3">
+                Remember me
+              </label>
+            </div>
+            <div className="text-center text-sm text-gray-500">
               Don't have an account?{" "}
-              <ChakraLink as={Link} to="/join" color="pink.500">
+              <Link
+                className="text-pink-500 underline"
+                to={{
+                  pathname: "/login",
+                  search: searchParams.toString(),
+                }}
+              >
                 Sign up
-              </ChakraLink>
-            </Text>
-          </Stack>
+              </Link>
+            </div>
+          </div>
         </Form>
-      </Box>
-    </Center>
+      </div>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
-import { Box, Link as ChakraLink } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
-import { formatDistance, subDays } from "date-fns";
+import { format } from "timeago.js";
 import type { getDiscussion } from "~/services/discussion.server";
 
 type Props = Exclude<
@@ -10,34 +9,23 @@ type Props = Exclude<
 
 export default function Discussion(props: Props) {
   return (
-    <Box w="90%" p={2}>
-      <Box as="h3">
-        <ChakraLink
-          mt="1"
-          fontWeight="semibold"
-          as={Link}
+    <div className="p-2 w-9/10">
+      <h3 className="text-2xl">
+        <Link
+          className="mt-1 font-semibold leading-tight truncate"
           to={`/discussion/${props.id}`}
-          lineHeight="tight"
-          isTruncated
         >
           {props?.title}
-        </ChakraLink>
-      </Box>
+        </Link>
+      </h3>
 
-      <Box color="gray.600" fontSize="sm">
-        {props.author.username} asked{" "}
-        {formatDistance(
-          subDays(new Date(props.createdAt), new Date().getDay()),
-          new Date(),
-          { addSuffix: true }
-        )}
-      </Box>
+      <div className="text-gray-600 text-sm">
+        {props.author.username} asked {format(props.createdAt)}
+      </div>
 
-      <Box fontSize="sm">
-        <ChakraLink as={Link} to={``}>
-          #{props.community?.name}
-        </ChakraLink>
-      </Box>
-    </Box>
+      <div className="text-sm">
+        <Link to={``}>#{props.community?.name}</Link>
+      </div>
+    </div>
   );
 }

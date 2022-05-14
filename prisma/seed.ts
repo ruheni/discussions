@@ -66,11 +66,14 @@ const communitiesData: Prisma.CommunityCreateInput[] = [
 async function seed() {
   console.log("Seeding...");
 
-  for (const community of communitiesData) {
-    await prisma.community.create({
-      data: community,
-    });
-  }
+  await prisma.$transaction(
+    communitiesData.map((community) =>
+      prisma.community.create({
+        data: community,
+      })
+    )
+  );
+
   console.log("... Done");
 }
 

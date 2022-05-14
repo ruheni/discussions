@@ -1,127 +1,53 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  useColorModeValue,
-  Button,
-  Flex,
-  Stack,
-  Text,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
-import { useSubmit } from "@remix-run/react";
 import type { User } from "@prisma/client";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 
 type Props = {
   user: User | null;
 };
 
 export default function NavBar(props: Props) {
-  const submit = useSubmit();
-
   return (
-    <Box width="100%">
-      <Flex
-        py={{ base: 2 }}
-        px={{ base: 8 }}
-        bg={useColorModeValue("white", "gray.800")}
-        color={useColorModeValue("gray.600", "white")}
-        minH={"60px"}
-        borderBottom={1}
-        borderStyle={"solid"}
-        borderColor={useColorModeValue("gray.200", "gray.900")}
-        align={"center"}
-      >
-        <Flex flex={{ base: 1 }}>
-          <Link to="/">
-            <Text
-              fontWeight="bold"
-              fontFamily={"heading"}
-              color={useColorModeValue("gray.800", "white")}
-            >
-              DisQuss
-            </Text>
+    <header className="shadow-sm px-6">
+      <div className="max-w-screen-xl p-4 mx-auto">
+        <div className="flex items-center justify-between space-x-4 lg:space-x-10">
+          <Link to="/" className="flex lg:w-0 lg:flex-1">
+            <span className="w-20 h-10 font-semibold">DisQuss</span>
           </Link>
-        </Flex>
 
-        {!props.user ? (
-          <Stack
-            flex={{ base: 1, md: 0 }}
-            justify={"flex-end"}
-            direction={"row"}
-            spacing={6}
-          >
-            {/* <Button onClick={toggleColorMode}>
-            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-          </Button> */}
-            <Button
-              fontSize={"sm"}
-              fontWeight={400}
-              variant="link"
-              as={Link}
-              to="/login"
+          <nav className="hidden space-x-8 text-sm font-medium md:flex"></nav>
+
+          {!props.user ? (
+            <div className="items-center justify-end flex-1 hidden space-x-4 sm:flex">
+              <Link
+                className="px-5 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md"
+                to="/login"
+              >
+                Log in
+              </Link>
+
+              <Link
+                className="px-5 py-2 text-sm font-medium text-white bg-pink-500 rounded-md"
+                to="/join"
+              >
+                Join
+              </Link>
+            </div>
+          ) : (
+            <Form
+              action="/logout"
+              method="post"
+              className="items-center justify-end flex-1 hidden space-x-4 sm:flex"
             >
-              Login
-            </Button>
-            <Button
-              // display={{ base: 'none', md: 'inline-flex' }}
-              fontSize={"sm"}
-              fontWeight={600}
-              color={"white"}
-              bg={"pink.400"}
-              as={Link}
-              _hover={{
-                bg: "pink.300",
-              }}
-              to={"/join"}
-            >
-              Join
-            </Button>
-          </Stack>
-        ) : (
-          <Stack>
-            <Flex alignItems={"center"}>
-              <Menu closeOnSelect closeOnBlur>
-                <MenuButton
-                  as={Button}
-                  rounded={"full"}
-                  variant={"link"}
-                  cursor={"pointer"}
-                  minW={0}
-                >
-                  <Avatar
-                    name={props.user.username}
-                    size={"sm"}
-                    // @ts-ignore
-                    src={props.user.imageUrl}
-                  />
-                </MenuButton>
-                <MenuList>
-                  <Link to="/community/create">
-                    <MenuItem>Create Community</MenuItem>
-                  </Link>
-                  <MenuItem>Profile</MenuItem>
-                  <MenuItem>Settings</MenuItem>
-                  <MenuDivider />
-                  <MenuItem
-                    onClick={() =>
-                      submit(null, { method: "post", action: "/logout" })
-                    }
-                  >
-                    Log out
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Flex>
-          </Stack>
-        )}
-      </Flex>
-    </Box>
+              <button
+                className="px-5 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-lg"
+                type="submit"
+              >
+                Logout
+              </button>
+            </Form>
+          )}
+        </div>
+      </div>
+    </header>
   );
 }
