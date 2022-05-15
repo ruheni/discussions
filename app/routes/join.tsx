@@ -40,7 +40,7 @@ export const action: ActionFunction = async ({ request }) => {
   const { data, fieldErrors } = await validateFormData(signupSchema, formData);
 
   if (fieldErrors) {
-    return json({ fieldErrors, data }, { status: 400 });
+    return json({ errors: fieldErrors, data }, { status: 400 });
   }
 
   const existingUser = await getUserByEmail(data.email);
@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (existingUser) {
     return json(
       {
-        fieldErrors,
+        errors: fieldErrors,
         data: "A user already exists with this email or username",
       },
       { status: 400 }

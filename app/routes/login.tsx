@@ -13,8 +13,8 @@ import { login } from "~/services/user.server";
 import { validateFormData } from "~/lib/form";
 
 const loginSchema = z.object({
-  email: z.string().email().min(3).email("Email is invalid"),
-  password: z.string().min(6, "Password is too short"),
+  email: z.string().email().min(3),
+  password: z.string().min(6,),
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -39,13 +39,13 @@ export const action: ActionFunction = async ({ request }) => {
   const { data, fieldErrors } = await validateFormData(loginSchema, formData);
 
   if (fieldErrors) {
-    return json({ fieldErrors, data }, { status: 400 });
+    return json({ errors: fieldErrors, data }, { status: 400 });
   }
 
   const { user, error } = await login(data.email, data.password);
 
   if (!user || error) {
-    return json({ formError: error, data }, { status: 400 });
+    return json({ errors: { email: error }, data }, { status: 400 });
   }
 
   return createUserSession({
