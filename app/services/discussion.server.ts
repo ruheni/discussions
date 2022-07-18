@@ -2,10 +2,10 @@ import { prisma } from "~/db.server";
 
 export async function getDiscussions() {
   return prisma.discussion.findMany({
-    orderBy: {
-      updatedAt: "desc",
-    },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      createdAt: true,
       author: {
         select: {
           username: true,
@@ -13,7 +13,14 @@ export async function getDiscussions() {
           imageUrl: true,
         },
       },
-      community: true,
+      community: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      updatedAt: "desc",
     },
   });
 }

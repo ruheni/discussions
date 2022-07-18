@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .page-container {
+    @apply container mx-auto text-xl max-w-prose m-4 mt-8 border-slate-200 border-2 drop-shadow-lg text-gray-700 bg-white rounded-md;
+  }
+
+  .prose-container {
+    @apply prose prose-slate prose-headings:font-bold prose-blockquote:border prose-blockquote:border-black prose-blockquote:p-8 prose-blockquote:text-xl prose-blockquote:rounded-lg prose-blockquote:leading-10 prose-p:leading-loose prose-lead:leading-relaxed marker:prose-li:text-black prose-li:text-black prose-li:font-medium prose-a:text-pink-600 prose-a:font-medium prose-a:no-underline hover:prose-a:text-pink-400 prose-img:border prose-img:border-black prose-img:p-4 prose-img:rounded-lg prose-pre:bg-black prose-pre:text-white prose-pre:text-base prose-pre:leading-loose;
+  }
+}

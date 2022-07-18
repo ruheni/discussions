@@ -1,32 +1,60 @@
-import { useLoaderData } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/server-runtime";
+import { Link, useLoaderData } from "@remix-run/react";
 import { getDiscussions } from "~/services/discussion.server";
 import { json } from "@remix-run/node";
-import Discussion from "~/components/Discussion";
+import DiscussionItem from "~/components/Discussion";
 
-type LoaderData = {
-  discussions: Awaited<ReturnType<typeof getDiscussions>>;
-};
-
-export const loader: LoaderFunction = async () => {
+export const loader = async () => {
   const discussions = await getDiscussions();
-  return json({
-    discussions,
-  });
+  return json({ discussions });
 };
 
-export default function Index() {
-  const { discussions } = useLoaderData<LoaderData>();
+const Index = () => {
+  const { discussions } = useLoaderData<typeof loader>();
 
   return (
-    <div className="mx-auto mt-4 mb-4 max-w-screen-sm py-6 rounded-lg bg-white text-gray-700">
+    <main className="page-container">
       {discussions.length === 0 ? (
-        <p>No discussions here</p>
+        <EmptyState />
       ) : (
-        discussions.map((discussion) => (
-          <Discussion key={discussion.id} {...discussion} />
-        ))
+        <div className="grid grid-cols-1 divide-y m-4">
+          {discussions.map((discussion) => (
+            <DiscussionItem key={discussion.id} {...discussion} />
+          ))}
+        </div>
       )}
-    </div>
+    </main>
   );
-}
+};
+
+export const EmptyState = () => (
+  <div className="relative p-8 text-center border border-gray-200 rounded-lg">
+    <h2 className="text-2xl font-medium">There's nothing here...</h2>
+
+    <p className="mt-4 text-sm text-gray-500">
+      Created discussions will appear here, try creating one!
+    </p>
+
+    <Link
+      to="/discussion/new"
+      className="inline-flex items-center px-5 py-3 mt-8 font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-500"
+    >
+      Start a discussion
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        className="flex-shrink-0 w-4 h-4 ml-3"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M14 5l7 7m0 0l-7 7m7-7H3"
+        />
+      </svg>
+    </Link>
+  </div>
+);
+
+export default Index;

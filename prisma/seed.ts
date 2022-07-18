@@ -2,6 +2,9 @@ import type { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+const sqlContent =
+  "# Selecting and summarizing columns \n ## Selecting Columns: SELECT, SELECT DISTINCT \n- SELECT (single) \n - SELECT (multiple) \n- SELECT DISTINCT \n #### EXERCISE: SINGLE COLUMN SELECT\n Get the title of every film.\n ```sql\n SELECT ___\n FROM films;\n ``` \n ```sql\n SELECT title\n FROM films;\n ```";
+
 const communitiesData: Prisma.CommunityCreateInput[] = [
   {
     name: "databases",
@@ -9,7 +12,7 @@ const communitiesData: Prisma.CommunityCreateInput[] = [
       create: [
         {
           title: "What is SeQueL?",
-          content: "Explain SQL to me like I'm 5. ¯\\_(ツ)_/¯ ",
+          content: sqlContent,
           author: {
             create: {
               username: "author_jnr",

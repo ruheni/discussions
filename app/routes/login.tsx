@@ -14,7 +14,7 @@ import { validateFormData } from "~/lib/form";
 
 const loginSchema = z.object({
   email: z.string().email().min(3),
-  password: z.string().min(6,),
+  password: z.string().min(6),
 });
 
 export const loader: LoaderFunction = async ({ request }) => {

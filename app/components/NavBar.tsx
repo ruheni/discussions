@@ -7,7 +7,7 @@ type Props = {
 
 export default function NavBar(props: Props) {
   return (
-    <header className="shadow-sm px-6">
+    <header className="shadow-sm px-6 bg-white">
       <div className="max-w-screen-xl p-4 mx-auto">
         <div className="flex items-center justify-between space-x-4 lg:space-x-10">
           <Link to="/" className="flex lg:w-0 lg:flex-1">

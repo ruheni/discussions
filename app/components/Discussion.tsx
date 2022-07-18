@@ -1,18 +1,27 @@
+import React from "react";
 import { Link } from "@remix-run/react";
 import { format } from "timeago.js";
-import type { getDiscussion } from "~/services/discussion.server";
 
-type Props = Exclude<
-  Awaited<PromiseLike<ReturnType<typeof getDiscussion>>>,
-  null
->;
+type Props = {
+  id: number;
+  title: string;
+  createdAt: string;
+  author: {
+    id: number;
+    username: string;
+    imageUrl: string | null;
+  };
+  community: {
+    name: string;
+  } | null;
+};
 
-export default function Discussion(props: Props) {
+const DiscussionItem: React.FC<Props> = (props) => {
   return (
-    <div className="p-2 w-9/10">
-      <h3 className="text-2xl">
+    <div className="p-4">
+      <h3 className="sm:text-xl">
         <Link
-          className="mt-1 font-semibold leading-tight truncate"
+          className="mt-1 font-bold leading-tight truncate"
           to={`/discussion/${props.id}`}
         >
           {props?.title}
@@ -28,4 +37,6 @@ export default function Discussion(props: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default DiscussionItem;
