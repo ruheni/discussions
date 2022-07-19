@@ -59,17 +59,8 @@ model User {
 
   role Role @default(Member)
 
-  password Password?
-
   communities Community[]
   discussions Discussion[]
-}
-
-model Password {
-  hash String
-
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId Int  @unique
 }
 
 enum Role {
