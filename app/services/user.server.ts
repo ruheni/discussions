@@ -1,64 +1,69 @@
-import type { Password, User } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import type { User } from "@prisma/client";
 
 import { prisma } from "~/db.server";
+import workos from "~/lib/workos.server";
 
 export type { User } from "@prisma/client";
 
 export async function getUserById(id: string) {
-  return prisma.user.findUnique({ where: { id: Number(id) } });
+  return prisma.user.findUnique({
+    where: {
+      id: Number(id)
+    }
+  });
 }
 
 export async function getUserByEmail(email: string) {
   return prisma.user.findUnique({ where: { email } });
 }
 
-export async function createUser(
-  username: string,
-  email: string,
-  password: string
-) {
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  return prisma.user.create({
+export async function createUser(username: string, email: string) {
+  const user = await prisma.user.create({
     data: {
       username,
       email,
-      password: {
-        create: {
-          hash: hashedPassword,
-        },
-      },
     },
   });
+
+  if (!user) return { error: "User with the given email already exists" };
+
+  const session = await workos.passwordless.createSession({
+    email: user.email,
+    type: "MagicLink",
+  });
+
+  if (!session) {
+    return { error: "Oops, something went wrong" };
+  }
+
+  await workos.passwordless.sendSession(session.id);
+
+  return { success: true };
 }
 
 export async function deleteUserByEmail(email: User["email"]) {
   return prisma.user.delete({ where: { email } });
 }
 
-export async function login(email: User["email"], password: Password["hash"]) {
-  const userWithPassword = await prisma.user.findUnique({
+export async function login(email: User["email"]) {
+  const user = await prisma.user.findUnique({
     where: { email },
-    include: {
-      password: true,
-    },
   });
 
-  if (!userWithPassword || !userWithPassword.password) {
-    return { error: "Incorrect email or password" };
+  if (!user) {
+    return { error: "User does not exist" };
   }
 
-  const isValid = await bcrypt.compare(
-    password,
-    userWithPassword.password.hash
-  );
+  const session = await workos.passwordless.createSession({
+    email: user.email,
+    type: "MagicLink",
+  });
 
-  if (!isValid) {
-    return { error: "Incorrect email or password" };
+  if (!session) {
+    return { error: "Oops, something went wrong" };
   }
 
-  const { password: _password, ...userWithoutPassword } = userWithPassword;
+  await workos.passwordless.sendSession(session.id);
 
-  return { user: userWithoutPassword };
+  return { success: true };
 }

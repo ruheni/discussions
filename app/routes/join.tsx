@@ -1,19 +1,19 @@
 import * as React from "react";
 import type {
   ActionFunction,
-  LoaderFunction,
+  LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { z } from "zod";
 
-import { getUserId, createUserSession } from "~/session.server";
+import { getUserId } from "~/session.server";
 
 import { createUser, getUserByEmail } from "~/services/user.server";
 import { validateFormData } from "~/lib/form";
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }:LoaderArgs) => {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
   return json({});
@@ -22,7 +22,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 type ActionData = {
   errors: {
     email?: string;
-    password?: string;
     username?: string;
   };
 };
@@ -30,12 +29,10 @@ type ActionData = {
 const signupSchema = z.object({
   username: z.string().min(1, "Username is invalid"),
   email: z.string().min(3).email("Email is invalid"),
-  password: z.string().min(6, "Password is too short"),
 });
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const redirectTo = formData.get("redirectTo");
 
   const { data, fieldErrors } = await validateFormData(signupSchema, formData);
 
@@ -55,14 +52,14 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const user = await createUser(data.username, data.email, data.password);
+  const { success, error } = await createUser(data.username, data.email);
 
-  return createUserSession({
-    request,
-    userId: user.id,
-    remember: false,
-    redirectTo: typeof redirectTo === "string" ? redirectTo : "/",
-  });
+  if (!success || error) {
+    return json({ errors: { email: error }, data }, { status: 400 });
+  }
+
+  /** redirect to confirmation page */
+  return redirect("/confirm");
 };
 
 export const meta: MetaFunction = () => {
@@ -73,17 +70,13 @@ export const meta: MetaFunction = () => {
 
 export default function Join() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData() as ActionData;
   const usernameRef = React.useRef<HTMLInputElement>(null);
   const emailRef = React.useRef<HTMLInputElement>(null);
-  const passwordRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (actionData?.errors?.email) {
       emailRef.current?.focus();
-    } else if (actionData?.errors?.password) {
-      passwordRef.current?.focus();
     } else if (actionData?.errors?.username) {
       usernameRef.current?.focus();
     }
@@ -110,7 +103,7 @@ export default function Join() {
                 type="text"
                 aria-invalid={actionData?.errors?.username ? true : undefined}
                 aria-describedby="username-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full rounded border border-gray-300 px-2 py-1 text-lg"
               />
               {actionData?.errors?.username && (
                 <div className="pt-1 text-red-700" id="username-error">
@@ -137,7 +130,7 @@ export default function Join() {
                 autoComplete="email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full rounded border border-gray-300 px-2 py-1 text-lg"
               />
               {actionData?.errors?.email && (
                 <div className="pt-1 text-red-700" id="email-error">
@@ -147,40 +140,13 @@ export default function Join() {
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <div className="mt-1">
-              <input
-                id="password"
-                ref={passwordRef}
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                aria-invalid={actionData?.errors?.password ? true : undefined}
-                aria-describedby="password-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.password && (
-                <div className="pt-1 text-red-700" id="password-error">
-                  {actionData.errors.password}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
             className="w-full rounded bg-pink-500  py-2 px-4 text-white hover:bg-pink-600 focus:bg-pink-400"
           >
             Create Account
           </button>
-          <div className="flex items-center justify-center">
+          <div className="flex">
             <div className="text-center text-sm text-slate-500">
               Already have an account?{" "}
               <Link
