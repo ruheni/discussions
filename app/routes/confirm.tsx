@@ -9,15 +9,13 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function Confirm() {
-  return <div className="relative m-8 p-4 text-center rounded-lg">
-    <h2 className="text-2xl font-medium">
-      📫  Check your inbox
-    </h2>
+  return (
+    <div className="relative m-8 p-4 text-center rounded-lg">
+      <h2 className="text-2xl font-medium">📫 Check your inbox</h2>
 
-    <p className="mt-4 text-md text-gray-500">
-
-      If it doesn't appear in your inbox, please check your spam folder
-    </p>
-
-  </div>;
+      <p className="mt-4 text-md text-gray-500">
+        If it doesn't appear in your inbox, please check your spam folder
+      </p>
+    </div>
+  );
 }

@@ -23,7 +23,7 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader = async ({ request }:LoaderArgs) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const user = await getUser(request);
   return json({ user });
 };

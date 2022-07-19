@@ -1,9 +1,5 @@
 import * as React from "react";
-import type {
-  ActionArgs,
-  LoaderArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { z } from "zod";

@@ -1,9 +1,5 @@
 import * as React from "react";
-import type {
-  ActionFunction,
-  LoaderArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import type { ActionFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { z } from "zod";
@@ -13,7 +9,7 @@ import { getUserId } from "~/session.server";
 import { createUser, getUserByEmail } from "~/services/user.server";
 import { validateFormData } from "~/lib/form";
 
-export const loader = async ({ request }:LoaderArgs) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
   return json({});

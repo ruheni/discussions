@@ -8,8 +8,8 @@ export type { User } from "@prisma/client";
 export async function getUserById(id: string) {
   return prisma.user.findUnique({
     where: {
-      id: Number(id)
-    }
+      id: Number(id),
+    },
   });
 }
 
