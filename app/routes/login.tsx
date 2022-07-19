@@ -40,7 +40,7 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   /** redirect to confirmation page */
-  redirect("/confirm");
+  return redirect("/confirm");
 };
 
 export const meta: MetaFunction = () => {
