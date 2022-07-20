@@ -79,8 +79,9 @@ export default function Join() {
   }, [actionData]);
 
   return (
-    <div className="flex min-h-[50%] flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
+    <div className="auth-container">
+      <div className="mx-auto w-full max-w-md py-12">
+        <h1 className="pb-6 text-2xl font-bold text-slate-700">Join the growing communities</h1>
         <Form method="post" className="space-y-6" noValidate>
           <div>
             <label
@@ -120,7 +121,6 @@ export default function Join() {
                 ref={emailRef}
                 id="email"
                 required
-                autoFocus={true}
                 name="email"
                 type="email"
                 autoComplete="email"

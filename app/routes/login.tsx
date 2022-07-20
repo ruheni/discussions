@@ -61,8 +61,9 @@ export default function Login() {
   }, [actionData]);
 
   return (
-    <div className="flex min-h-[50%] flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
+    <div className="auth-container">
+      <div className="mx-auto w-full max-w-md py-12">
+      <h1 className="pb-6 text-2xl font-bold text-slate-700">Jump back in right where you left</h1>
         <Form method="post" className="space-y-6" noValidate>
           <div>
             <label

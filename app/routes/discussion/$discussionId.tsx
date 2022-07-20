@@ -25,7 +25,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 export default function DiscussionPage() {
   const { discussion } = useLoaderData<typeof loader>();
   return (
-    <main className="page-container p-6">
+    <main className="page-container p-6 sm:m-2 sm:mx-auto">
       {discussion && (
         <div className="prose-container">
           <h1 className="font-bold text-3xl leading-tight">

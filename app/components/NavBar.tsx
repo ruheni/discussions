@@ -11,7 +11,7 @@ export default function NavBar(props: Props) {
       <div className="max-w-screen-xl p-4 mx-auto">
         <div className="flex items-center justify-between space-x-4 lg:space-x-10">
           <Link to="/" className="flex lg:w-0 lg:flex-1">
-            <span className="w-20 h-10 font-semibold">DisQuss</span>
+            <span className="w-20 h-10 font-semibold py-2"> DisQuss</span>
           </Link>
 
           <nav className="hidden space-x-8 text-sm font-medium md:flex"></nav>

@@ -43,7 +43,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full bg-slate-100 ">
+      <body className="h-full bg-slate-100">
         <NavBar user={user} />
         <Outlet />
         <ScrollRestoration />

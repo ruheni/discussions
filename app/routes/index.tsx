@@ -12,16 +12,19 @@ const Index = () => {
   const { discussions } = useLoaderData<typeof loader>();
 
   return (
-    <main className="page-container">
-      {discussions.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <div className="grid grid-cols-1 divide-y m-4">
-          {discussions.map((discussion) => (
-            <DiscussionItem key={discussion.id} {...discussion} />
-          ))}
-        </div>
-      )}
+    <main className="m-2">
+      <div className="page-container">
+
+        {discussions.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="grid grid-cols-1 divide-y m-4">
+            {discussions.map((discussion) => (
+              <DiscussionItem key={discussion.id} {...discussion} />
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 };
