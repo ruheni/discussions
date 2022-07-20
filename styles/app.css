@@ -8,7 +8,7 @@
   }
 
   .auth-container {
-    @apply bg-white rounded-md max-w-prose text-sm mt-12 mx-auto border-slate-200 border-2 drop-shadow-lg text-gray-700 flex min-h-full flex-col justify-center items-center;
+    @apply bg-white rounded-md max-w-prose text-sm mt-12 mx-auto border-slate-200 border-2 drop-shadow-lg text-gray-700 flex min-h-full flex-col justify-center items-center  px-4;
   }
 
   .prose-container {

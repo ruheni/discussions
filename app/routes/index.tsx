@@ -14,7 +14,6 @@ const Index = () => {
   return (
     <main className="m-2">
       <div className="page-container">
-
         {discussions.length === 0 ? (
           <EmptyState />
         ) : (

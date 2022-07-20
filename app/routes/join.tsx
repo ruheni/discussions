@@ -79,84 +79,88 @@ export default function Join() {
   }, [actionData]);
 
   return (
-    <div className="auth-container">
-      <div className="mx-auto w-full max-w-md py-12">
-        <h1 className="pb-6 text-2xl font-bold text-slate-700">Join the growing communities</h1>
-        <Form method="post" className="space-y-6" noValidate>
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Username
-            </label>
-            <div className="mt-1">
-              <input
-                ref={usernameRef}
-                id="username"
-                required
-                autoFocus={true}
-                name="username"
-                type="text"
-                aria-invalid={actionData?.errors?.username ? true : undefined}
-                aria-describedby="username-error"
-                className="w-full rounded border border-gray-300 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.username && (
-                <div className="pt-1 text-red-700" id="username-error">
-                  {actionData.errors.username}
-                </div>
-              )}
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email address
-            </label>
-            <div className="mt-1">
-              <input
-                ref={emailRef}
-                id="email"
-                required
-                name="email"
-                type="email"
-                autoComplete="email"
-                aria-invalid={actionData?.errors?.email ? true : undefined}
-                aria-describedby="email-error"
-                className="w-full rounded border border-gray-300 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.email && (
-                <div className="pt-1 text-red-700" id="email-error">
-                  {actionData.errors.email}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full rounded bg-pink-500  py-2 px-4 text-white hover:bg-pink-600 focus:bg-pink-400"
-          >
-            Create Account
-          </button>
-          <div className="flex">
-            <div className="text-center text-sm text-slate-500">
-              Already have an account?{" "}
-              <Link
-                className="text-pink-500 underline"
-                to={{
-                  pathname: "/login",
-                  search: searchParams.toString(),
-                }}
+    <div className="mx-4">
+      <div className="auth-container">
+        <div className="mx-auto w-full max-w-md py-12">
+          <h1 className="pb-6 text-2xl font-bold text-slate-700">
+            Join the growing communities
+          </h1>
+          <Form method="post" className="space-y-6" noValidate>
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
               >
-                Log in
-              </Link>
+                Username
+              </label>
+              <div className="mt-1">
+                <input
+                  ref={usernameRef}
+                  id="username"
+                  required
+                  autoFocus={true}
+                  name="username"
+                  type="text"
+                  aria-invalid={actionData?.errors?.username ? true : undefined}
+                  aria-describedby="username-error"
+                  className="w-full rounded border border-gray-300 px-2 py-1 text-lg"
+                />
+                {actionData?.errors?.username && (
+                  <div className="pt-1 text-red-700" id="username-error">
+                    {actionData.errors.username}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </Form>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email address
+              </label>
+              <div className="mt-1">
+                <input
+                  ref={emailRef}
+                  id="email"
+                  required
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  aria-invalid={actionData?.errors?.email ? true : undefined}
+                  aria-describedby="email-error"
+                  className="w-full rounded border border-gray-300 px-2 py-1 text-lg"
+                />
+                {actionData?.errors?.email && (
+                  <div className="pt-1 text-red-700" id="email-error">
+                    {actionData.errors.email}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full rounded bg-pink-500  py-2 px-4 text-white hover:bg-pink-600 focus:bg-pink-400"
+            >
+              Create Account
+            </button>
+            <div className="flex">
+              <div className="text-center text-sm text-slate-500">
+                Already have an account?{" "}
+                <Link
+                  className="text-pink-500 underline"
+                  to={{
+                    pathname: "/login",
+                    search: searchParams.toString(),
+                  }}
+                >
+                  Log in
+                </Link>
+              </div>
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   );
