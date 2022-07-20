@@ -25,46 +25,48 @@ export const loader = async ({ params }: LoaderArgs) => {
 export default function DiscussionPage() {
   const { discussion } = useLoaderData<typeof loader>();
   return (
-    <main className="page-container p-6 sm:m-2 sm:mx-auto">
-      {discussion && (
-        <div className="prose-container">
-          <h1 className="font-bold text-3xl leading-tight">
-            {discussion.title}
-          </h1>
+    <div className="m-2 ">
+      <main className="page-container p-6 sm:m-2 sm:mx-auto">
+        {discussion && (
+          <div className="prose-container">
+            <h1 className="font-bold text-3xl leading-tight">
+              {discussion.title}
+            </h1>
 
-          <div className="text-md text-gray-600">
-            <strong>
-              <Link to={`#`}>{discussion.author.username}</Link>
-            </strong>{" "}
-            asked in{" "}
-            <strong>
-              <Link to={`#`}>#{discussion.community?.name}</Link>
-            </strong>{" "}
-            {format(discussion.createdAt)}
-          </div>
+            <div className="text-md text-gray-600">
+              <strong>
+                <Link to={`#`}>{discussion.author.username}</Link>
+              </strong>{" "}
+              asked in{" "}
+              <strong>
+                <Link to={`#`}>#{discussion.community?.name}</Link>
+              </strong>{" "}
+              {format(discussion.createdAt)}
+            </div>
 
-          <div>
-            <div className="flex -space-x-2">
-              {/* <Link to={`/user/${discussion.author.id}`}>
+            <div>
+              <div className="flex -space-x-2">
+                {/* <Link to={`/user/${discussion.author.id}`}>
                 {discussion.author.avatar}
               </Link> */}
-              {/* <Avatar
+                {/* <Avatar
                 name={discussion.author.username}
                 size={"sm"}
                 // @ts-ignore
                 src={discussion.author.imageUrl}
               /> */}
-              {/* <p>
+                {/* <p>
                 <Link to={``} className="font-bold">
                   {discussion.author.username}
                 </Link>{" "} asked
               </p> */}
-            </div>
+              </div>
 
-            <p dangerouslySetInnerHTML={{ __html: discussion.content }} />
+              <p dangerouslySetInnerHTML={{ __html: discussion.content }} />
+            </div>
           </div>
-        </div>
-      )}
-    </main>
+        )}
+      </main>
+    </div>
   );
 }
