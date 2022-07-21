@@ -37,7 +37,7 @@ export const EmptyState = () => (
     </p>
 
     <Link
-      to="/discussion/new"
+      to="/d/new"
       className="inline-flex items-center px-5 py-3 mt-8 font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-500"
     >
       Start a discussion

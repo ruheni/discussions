@@ -1,5 +1,6 @@
 import type { User } from "@prisma/client";
 import { Form, Link } from "@remix-run/react";
+import { Menu } from "@headlessui/react";
 
 type Props = {
   user: User | null;
@@ -23,7 +24,7 @@ export default function NavBar(props: Props) {
           </nav>
 
           <div className="flex items-center gap-4">
-            {!props.user ? (
+            {!props.user && (
               <div className="items-center justify-end flex-1 space-x-4 sm:flex">
                 <Link
                   className="px-5 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md"
@@ -39,20 +40,77 @@ export default function NavBar(props: Props) {
                   Join
                 </Link>
               </div>
-            ) : (
-              <Form
-                action="/logout"
-                method="post"
-                className="items-center justify-end flex-1 hidden space-x-4 sm:flex"
-              >
-                <button
-                  className="px-5 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-lg"
-                  type="submit"
-                >
-                  Logout
-                </button>
-              </Form>
             )}
+            <Menu as="button" className="relative inline-block">
+              <Menu.Button className="p-2.5 text-gray-600 transition bg-gray-100 rounded">
+                <span className="sr-only">Toggle menu</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </Menu.Button>
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                <div className="px-1 py-1">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link
+                        to="/d/new"
+                        className={`${active ? "bg-pink-500 text-white" : "text-gray-900 cursor-not-allowed"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        New Discussion
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item
+                    disabled={true}
+                  >
+                    {() => (
+                      <Link
+                        to="/d/new"
+                        className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm cursor-not-allowed"
+                      >
+                        New Community
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item
+                    disabled={true}
+                  >
+                    {() => (
+                      <Link
+                        to={`${props.user?.username}`}
+                        className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm cursor-not-allowed"
+                      >
+                        Profile
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Form
+                        action="/logout"
+                        method="post"
+                        className={`${active ? "bg-pink-500 text-white" : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        <button type="submit">Logout</button>
+                      </Form>
+                    )}
+                  </Menu.Item>
+                </div>
+              </Menu.Items>
+            </Menu>
           </div>
         </div>
       </div>

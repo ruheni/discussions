@@ -20,7 +20,7 @@ const DiscussionItem: React.FC<Props> = (props) => {
   return (
     <div className="p-2">
       <h2 className="mt-1 font-semibold sm:text-xl">
-        <Link to={`/discussion/${props.id}`}>{props?.title}</Link>
+        <Link to={`/d/${props.id}`}>{props?.title}</Link>
       </h2>
 
       <div className="text-gray-600 text-sm">
