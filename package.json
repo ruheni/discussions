@@ -38,8 +38,8 @@
   "dependencies": {
     "@headlessui/react": "1.6.6",
     "@prisma/client": "4.0.0",
-    "@remix-run/express": "1.6.5",
-    "@remix-run/node": "1.6.5",
+    "@remix-run/express": "2.17.3",
+    "@remix-run/node": "2.17.3",
     "@remix-run/react": "1.6.5",
     "@remix-run/server-runtime": "1.6.5",
     "@workos-inc/node": "2.10.0",
